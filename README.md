@@ -66,7 +66,7 @@ while setting valuable data and pre-trained models for future research in both a
     <img src="figs/fine_grained.png" width="100%"></a> <br>
 </p>
 
-* Comprehensive multi-round conversation
+* Comprehensive multi-round conversation.
 
 <p align="center">
     <img src="figs/comprehensive.png" width="100%"></a> <br>
@@ -77,7 +77,7 @@ while setting valuable data and pre-trained models for future research in both a
 If you find MarineGPT helpful, please consider citing:
 ```
 @misc{zheng2023marinegpt,
-      title={SurgicalSAM: Efficient Class Promptable Surgical Instrument Segmentation}, 
+      title={MarineGPT: Unlocking Secrets of "Ocean" to the Public}, 
       author={Ziqiang Zheng and Jipeng Zhang and Tuan-Anh Vu and Shizhe Diao and Yue Him Wong Tim and Sai-Kit Yeung},
       year={2023},
       eprint={},
