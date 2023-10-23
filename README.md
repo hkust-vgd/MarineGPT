@@ -12,7 +12,7 @@ Brief description of the project.
 
 <a href="https://marinegpt.github.io/MarineGPT/"><img src="https://img.shields.io/badge/WEBSITE-Visit%20project%20page-blue?style=for-the-badge"></a>
 
-<a href=""><img src="https://img.shields.io/badge/arXiv-Paper-<color>"></a>
+<a href="https://arxiv.org/pdf/2310.13596"><img src="https://img.shields.io/badge/arXiv-Paper-<color>"></a>
 
 A first vision-language model specially designed for the marine domain. It could generate more **sensitive**, **informative**, and **scientific** responses as a powerful marine AI assistant.
 
@@ -80,7 +80,7 @@ If you find MarineGPT helpful, please consider citing:
       title={MarineGPT: Unlocking Secrets of "Ocean" to the Public}, 
       author={Ziqiang Zheng and Jipeng Zhang and Tuan-Anh Vu and Shizhe Diao and Yue Him Wong Tim and Sai-Kit Yeung},
       year={2023},
-      eprint={},
+      eprint={2310.13596},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
