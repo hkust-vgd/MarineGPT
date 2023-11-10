@@ -10,7 +10,7 @@ Brief description of the project.
 
 # <img src="figs/MarineGPT_logo.png" alt="The logo of MarineGPT" width="40" height="40"> MarineGPT: Unlocking Secrets of "Ocean" to the Public
 
-<a href="https://marinegpt.github.io/MarineGPT/"><img src="https://img.shields.io/badge/WEBSITE-Visit%20project%20page-blue?style=for-the-badge"></a>
+<a href="https://hkust-vgd.github.io/MarineGPT/"><img src="https://img.shields.io/badge/WEBSITE-Visit%20project%20page-blue?style=for-the-badge"></a>
 
 <a href="https://arxiv.org/pdf/2310.13596"><img src="https://img.shields.io/badge/arXiv-Paper-<color>"></a>
 
