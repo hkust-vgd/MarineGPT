@@ -1,0 +1,44 @@
+<Img><ImageHere></Img> Describe this image in detail.
+<Img><ImageHere></Img> Take a look at this image and describe what you notice.
+<Img><ImageHere></Img> Please provide a detailed description of the picture.
+<Img><ImageHere></Img> Could you describe the contents of this image for me?
+<Img><ImageHere></Img> Could you describe the species richness and distribution of object in this image for me?
+<Img><ImageHere></Img> Could you answer how does the biodiversity vary across different marine ecosystems in this image?
+<Img><ImageHere></Img> Could you answer what are the factors influencing the abundance and diversity of species of objects in this image?
+<Img><ImageHere></Img> Please answer how can we effectively conserve and protect th objects in this image and their habitats.
+<Img><ImageHere></Img> Please answer how does the object in this figure interact with other species in marine ecosystems.
+<Img><ImageHere></Img> Please answer what are the predator-prey relationships for object in this image and how do they influence population dynamics.
+<Img><ImageHere></Img> Could you answer the symbiotic relationships of the object in this image contribute to ecosystem functioning?
+<Img><ImageHere></Img> Could you answer how does the object in this image compete for resources and coexist in the same environment?
+<Img><ImageHere></Img> Could you answer what ecological roles does the object play within their ecosystems?
+<Img><ImageHere></Img> Take a look at this image and describe how does the object contribute to nutrient cycling, energy flow, and ecosystem stability.
+<Img><ImageHere></Img> Take a look at this image and describe how do keystone species and ecosystem engineers shape their habitats and influence other organisms for the objects in this figure.
+<Img><ImageHere></Img> Could you answer how has the object in this figure adapted to survive and thrive in their specific environments?
+<Img><ImageHere></Img> Could you answer what physiological, morphological, and behavioral adaptations of the object have evolved to cope with challenges such as temperature, salinity, and water pressure?
+<Img><ImageHere></Img> Could you describe how does natural selection drive speciation and evolutionary changes for the object in this figure?
+<Img><ImageHere></Img> Could you describe how do human activities, such as pollution, overfishing, and habitat destruction, impact the object in this figure?
+<Img><ImageHere></Img> Take a look at this image and describe what are the ecological consequences of losing the object in this figure.
+<Img><ImageHere></Img> Take a look at this image and describe how can we mitigate and manage human-induced threats to the object in this figure.
+<Img><ImageHere></Img> Take a look at this image and describe how is the object in this figure responding to climate change, including rising temperatures and ocean acidificatio.
+<Img><ImageHere></Img> Could you describe how do climate changes affect the distribution, reproduction, and survival of the object in this figure?
+<Img><ImageHere></Img> Could you describe how can we predict and mitigate the impacts of climate change on marine ecosystems what the object in this figure is in?
+<Img><ImageHere></Img> Could you describe what are the reproductive strategies and life cycles of the object?
+<Img><ImageHere></Img> Could you describe what how do environmental factors influence reproduction, larval development, and recruitment of the object in this figure?
+<Img><ImageHere></Img> Could you describe the detailed morphological features and anatomical adaptations of the object in this figure?
+<Img><ImageHere></Img> Could you answer the diet and feeding behavior of the object in this figure?
+<Img><ImageHere></Img> Could you answer how does the feeding behavior of the object in this figure change with age, habitat, or environmental conditions?
+<Img><ImageHere></Img> Could you answer the reproductive strategies, mating behavior, and reproductive success of the object in this figure?
+<Img><ImageHere></Img> Take a look at this image and describe the life cycle of this species, including the duration and development of its larvae and juveniles.
+<Img><ImageHere></Img> Take a look at this image and describe the specific growth patterns or stages of the object that can be identified.
+<Img><ImageHere></Img> Take a look at this image and describe the preferred habitats and distribution patterns of the object in this figure.
+<Img><ImageHere></Img> Please provide how do environmental factors influence the growth rates and overall life history of the object in this figure.
+<Img><ImageHere></Img> Please provide the conservation status of the object in this figure, including their population trends, threats they face, and the effectiveness of existing conservation measures.
+<Img><ImageHere></Img> Please determine this object's scientific name, classification within the taxonomic hierarchy, and its relationships to other known species.
+<Img><ImageHere></Img> Please describe the behaviors and social dynamics of the object in this figure.
+<Img><ImageHere></Img> Please describe the genetic analyses and molecular studies of the object in this figure.
+<Img><ImageHere></Img> Please describe the interactions with other organisms of the object in this figure.
+<Img><ImageHere></Img> Please describe how many objects in this figure and tell the coordinates of these objects.
+<Img><ImageHere></Img> Please tell the coral coverage of this figure and localize the corals.
+<Img><ImageHere></Img> Please detect all the objects in this figure.
+<Img><ImageHere></Img> Please summarize what is happening in this figure.
+<Img><ImageHere></Img> Please describe this figure in detail.
