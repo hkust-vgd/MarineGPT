@@ -13,7 +13,7 @@ model:
   num_query_token: 32
 
   # Vicuna
-  llama_model: "/data/marinegpt/MiniGPT-4/vicuna_v0_7B/"
+  llama_model: "./vicuna_v0_7B/"
 
   # generation configs
   prompt: ""
