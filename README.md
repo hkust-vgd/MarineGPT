@@ -20,6 +20,7 @@ A first vision-language model specially designed for the marine domain. It could
 
 ## 📢 News
 [Feb.26 2024] MarineGPT now supports the [GEMMA](https://blog.google/technology/developers/gemma-open-models/) and we released the pre-trained models of GEMMA.
+
 [Feb.19 2024] We released the pre-trained models of MarineGPT.
 
 
@@ -143,6 +144,7 @@ llama_model: "/path/to/GEMMA_weights/"
 For **MarineGPT**, we will also plan to support the LLaMA and LLaMA 2 version. We will release the trained weights very soon.
 
 **Vicuna**
+
 | MarineGPT Stage 1 (Vicuna 13B)                                                                           | MarineGPT Stage 2 (Vicuna 13B)                                                                 | MarineGPT stage 1 (Vicuna 7B)                                                                  | MarineGPT stage 2 (Vicuna 7B)               |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
 | [Download](https://www.dropbox.com/scl/fi/ot7eefgrnq0jrx51mwktx/marinegpt_vicuna_13B_stage1_ckpt.pth?rlkey=b17nkct52abl5wdomjsvfrf1j&dl=0) | [Download](https://www.dropbox.com/scl/fi/zo19kqd7ay1h7frbxptnw/marinegpt_vicuna_13B_stage2_ckpt.pth?rlkey=2of6jkiaqdu1i44rzvxeg6hlu&dl=0) | [Download](https://www.dropbox.com/scl/fi/lmxwkp96u326h82lssj7w/marinegpt_vicuna_7B_stage1_ckpt.pth?rlkey=rfnup88u9y3go7vs8xowr73n5&dl=0) | [Download](https://www.dropbox.com/scl/fi/8uimfr9vjk8sa6yyvvnbk/marinegpt_vicuna_7B_stage2_ckpt.pth?rlkey=4cwn4cmgi8gjnqfyds2aqnw8s&dl=0) |
@@ -159,6 +161,7 @@ in [eval_configs/marinegpt_eval.yaml](eval_configs/marinegpt_eval.yaml#L11) at L
 **3. Launching Demo Locally**
 
 **Vicuna**
+
 For MarineGPT, run
 
 ```
@@ -172,6 +175,7 @@ ckpt: './ckpt/vicuna_7B/stage1/marinegpt_vicuna_7B_stage1_ckpt.pth'
 ```
 
 **GEMMA**
+
 For MarineGPT, run
 
 ```
