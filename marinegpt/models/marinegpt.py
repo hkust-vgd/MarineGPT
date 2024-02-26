@@ -9,6 +9,7 @@ from marinegpt.common.registry import registry
 from marinegpt.models.blip2 import Blip2Base, disabled_train
 from marinegpt.models.modeling_llama import LlamaForCausalLM
 from transformers import LlamaTokenizer
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
 @registry.register_model("marinegpt")
@@ -19,6 +20,7 @@ class MarineGPT(Blip2Base):
 
     PRETRAINED_MODEL_CONFIG_DICT = {
         "pretrain_vicuna": "configs/models/marinegpt.yaml",
+        "pretrain_gemma": "configs/models/marinegpt_gemma.yaml",
     }
 
     def __init__(
@@ -33,6 +35,8 @@ class MarineGPT(Blip2Base):
         freeze_qformer=True,
         num_query_token=32,
         llama_model="",
+        gemma_model="",
+        model_format="",
         prompt_path="",
         prompt_template="",
         max_txt_len=32,
@@ -44,7 +48,7 @@ class MarineGPT(Blip2Base):
 
         self.tokenizer = self.init_tokenizer()
         self.low_resource = low_resource
-
+        self.model_format = model_format
         print('Loading VIT')
         self.visual_encoder, self.ln_vision = self.init_vision_encoder(
             vit_model, img_size, drop_path_rate, use_grad_checkpoint, vit_precision
@@ -82,30 +86,50 @@ class MarineGPT(Blip2Base):
             logging.info("freeze Qformer")
         print('Loading Q-Former Done')
 
-        print('Loading LLAMA')
-        self.llama_tokenizer = LlamaTokenizer.from_pretrained(llama_model, use_fast=False)
-        self.llama_tokenizer.pad_token = self.llama_tokenizer.eos_token
+        if self.model_format == "llama_model":
+            print('Loading LLAMA')
+            self.llama_tokenizer = LlamaTokenizer.from_pretrained(llama_model, use_fast=False)
+            self.llama_tokenizer.pad_token = self.llama_tokenizer.eos_token
 
-        if self.low_resource:
-            self.llama_model = LlamaForCausalLM.from_pretrained(
-                llama_model,
-                torch_dtype=torch.float16,
-                load_in_8bit=True,
-                device_map={'': device_8bit}
+            if self.low_resource:
+                self.llama_model = LlamaForCausalLM.from_pretrained(
+                    llama_model,
+                    torch_dtype=torch.float16,
+                    load_in_8bit=True,
+                    device_map={'': device_8bit}
+                )
+            else:
+                self.llama_model = LlamaForCausalLM.from_pretrained(
+                    llama_model,
+                    torch_dtype=torch.float16,
+                )
+
+            for name, param in self.llama_model.named_parameters():
+                param.requires_grad = False
+            print('Loading LLAMA Done')
+            self.llama_proj = nn.Linear(
+                self.Qformer.config.hidden_size, self.llama_model.config.hidden_size
             )
-        else:
-            self.llama_model = LlamaForCausalLM.from_pretrained(
-                llama_model,
-                torch_dtype=torch.float16,
+        if self.model_format=="gemma_model":
+            print('Loading GEMMA')
+            self.gemma_tokenizer = AutoTokenizer.from_pretrained(gemma_model)
+            if self.low_resource:
+                self.gemma_model = AutoModelForCausalLM.from_pretrained(gemma_model, load_in_8bit=True,
+                    device_map={'': device_8bit},torch_dtype=torch.float16)
+            else:
+                self.gemma_model = AutoModelForCausalLM.from_pretrained(gemma_model, device_map="auto",
+                                                                        torch_dtype=torch.float16)
+            self.gemma_tokenizer.pad_token_id = self.gemma_tokenizer.eos_token_id
+            self.gemma_tokenizer.pad_token = self.gemma_tokenizer.eos_token
+
+            for name, param in self.gemma_model.named_parameters():
+                param.requires_grad = False
+            print('Loading GEMMA Done')
+
+            self.gemma_proj = nn.Linear(
+                self.Qformer.config.hidden_size, self.gemma_model.config.hidden_size
             )
 
-        for name, param in self.llama_model.named_parameters():
-            param.requires_grad = False
-        print('Loading LLAMA Done')
-
-        self.llama_proj = nn.Linear(
-            self.Qformer.config.hidden_size, self.llama_model.config.hidden_size
-        )
         self.max_txt_len = max_txt_len
         self.end_sym = end_sym
 
@@ -163,21 +187,36 @@ class MarineGPT(Blip2Base):
                 encoder_attention_mask=image_atts,
                 return_dict=True,
             )
-
-            inputs_llama = self.llama_proj(query_output.last_hidden_state)
-            atts_llama = torch.ones(inputs_llama.size()[:-1], dtype=torch.long).to(image.device)
-        return inputs_llama, atts_llama
+            if self.model_format=="llama_model":
+                inputs_llama = self.llama_proj(query_output.last_hidden_state)
+                atts_llama = torch.ones(inputs_llama.size()[:-1], dtype=torch.long).to(image.device)
+                return inputs_llama, atts_llama
+            else:
+                inputs_gemma = self.gemma_proj(query_output.last_hidden_state)
+                atts_gemma = torch.ones(inputs_gemma.size()[:-1], dtype=torch.long).to(image.device)
+                return inputs_gemma,atts_gemma
 
     def prompt_wrap(self, img_embeds, atts_img, prompt):
         if prompt:
             batch_size = img_embeds.shape[0]
             p_before, p_after = prompt.split('<ImageHere>')
-            p_before_tokens = self.llama_tokenizer(
-                p_before, return_tensors="pt", add_special_tokens=False).to(img_embeds.device)
-            p_after_tokens = self.llama_tokenizer(
-                p_after, return_tensors="pt", add_special_tokens=False).to(img_embeds.device)
-            p_before_embeds = self.llama_model.model.embed_tokens(p_before_tokens.input_ids).expand(batch_size, -1, -1)
-            p_after_embeds = self.llama_model.model.embed_tokens(p_after_tokens.input_ids).expand(batch_size, -1, -1)
+
+            if self.model_format=="llama_model":
+
+                p_before_tokens = self.llama_tokenizer(
+                    p_before, return_tensors="pt", add_special_tokens=False).to(img_embeds.device)
+                p_after_tokens = self.llama_tokenizer(
+                    p_after, return_tensors="pt", add_special_tokens=False).to(img_embeds.device)
+                p_before_embeds = self.llama_model.model.embed_tokens(p_before_tokens.input_ids).expand(batch_size, -1, -1)
+                p_after_embeds = self.llama_model.model.embed_tokens(p_after_tokens.input_ids).expand(batch_size, -1, -1)
+            elif self.model_format=="gemma_model":
+
+                p_before_tokens = self.gemma_tokenizer(
+                    p_before, return_tensors="pt", add_special_tokens=False).to(img_embeds.device)
+                p_after_tokens = self.gemma_tokenizer(
+                    p_after, return_tensors="pt", add_special_tokens=False).to(img_embeds.device)
+                p_before_embeds = self.gemma_model.model.embed_tokens(p_before_tokens.input_ids).expand(batch_size, -1,-1)
+                p_after_embeds = self.gemma_model.model.embed_tokens(p_after_tokens.input_ids).expand(batch_size, -1,-1)
             wrapped_img_embeds = torch.cat([p_before_embeds, img_embeds, p_after_embeds], dim=1)
             wrapped_atts_img = atts_img[:, :1].expand(-1, wrapped_img_embeds.shape[1])
             return wrapped_img_embeds, wrapped_atts_img
@@ -193,24 +232,35 @@ class MarineGPT(Blip2Base):
             img_embeds, atts_img = self.prompt_wrap(img_embeds, atts_img, vqa_prompt)
         elif self.prompt_list:
             prompt = random.choice(self.prompt_list)
-            img_embeds, atts_img = self.prompt_wrap(img_embeds, atts_img, prompt)
-
-        self.llama_tokenizer.padding_side = "right"
+            img_embeds, atts_img = self.prompt_wrap(img_embeds, atts_img,prompt)
 
         text = [t + self.end_sym for t in samples["text_input"]]
-
-        to_regress_tokens = self.llama_tokenizer(
-            text,
-            return_tensors="pt",
-            padding="longest",
-            truncation=True,
-            max_length=self.max_txt_len,
-            add_special_tokens=False
-        ).to(image.device)
-
-        targets = to_regress_tokens.input_ids.masked_fill(
-            to_regress_tokens.input_ids == self.llama_tokenizer.pad_token_id, -100
-        )
+        if self.model_format=="llama_model":
+            self.llama_tokenizer.padding_side = "right"
+            to_regress_tokens = self.llama_tokenizer(
+                text,
+                return_tensors="pt",
+                padding="longest",
+                truncation=True,
+                max_length=self.max_txt_len,
+                add_special_tokens=False
+            ).to(image.device)
+            targets = to_regress_tokens.input_ids.masked_fill(
+                to_regress_tokens.input_ids == self.llama_tokenizer.pad_token_id, -100
+            )
+        else:
+            self.gemma_tokenizer.padding_side = "right"
+            to_regress_tokens = self.gemma_tokenizer(
+                text,
+                return_tensors="pt",
+                padding="longest",
+                truncation=True,
+                max_length=self.max_txt_len,
+                add_special_tokens=False
+            ).to(image.device)
+            targets = to_regress_tokens.input_ids.masked_fill(
+                to_regress_tokens.input_ids == self.gemma_tokenizer.pad_token_id, -100
+            )
 
         empty_targets = (
             torch.ones([atts_img.shape[0], atts_img.shape[1]+1],
@@ -219,23 +269,38 @@ class MarineGPT(Blip2Base):
         targets = torch.cat([empty_targets, targets], dim=1)
 
         batch_size = img_embeds.shape[0]
-        bos = torch.ones([batch_size, 1],
-                         dtype=to_regress_tokens.input_ids.dtype,
-                         device=to_regress_tokens.input_ids.device) * self.llama_tokenizer.bos_token_id
-        bos_embeds = self.llama_model.model.embed_tokens(bos)
-        atts_bos = atts_img[:, :1]
 
-        to_regress_embeds = self.llama_model.model.embed_tokens(to_regress_tokens.input_ids)
+        if self.model_format=="llama_model":
+            bos = torch.ones([batch_size, 1],
+                             dtype=to_regress_tokens.input_ids.dtype,
+                             device=to_regress_tokens.input_ids.device) * self.llama_tokenizer.bos_token_id
+            bos_embeds = self.llama_model.model.embed_tokens(bos)
+            to_regress_embeds = self.llama_model.model.embed_tokens(to_regress_tokens.input_ids)
+        else:
+            bos = torch.ones([batch_size, 1],
+                             dtype=to_regress_tokens.input_ids.dtype,
+                             device=to_regress_tokens.input_ids.device) * self.gemma_tokenizer.bos_token_id
+            bos_embeds = self.gemma_model.model.embed_tokens(bos)
+            to_regress_embeds = self.gemma_model.model.embed_tokens(to_regress_tokens.input_ids)
+        atts_bos = atts_img[:, :1]
         inputs_embeds = torch.cat([bos_embeds, img_embeds, to_regress_embeds], dim=1)
         attention_mask = torch.cat([atts_bos, atts_img, to_regress_tokens.attention_mask], dim=1)
 
         with self.maybe_autocast():
-            outputs = self.llama_model(
-                inputs_embeds=inputs_embeds,
-                attention_mask=attention_mask,
-                return_dict=True,
-                labels=targets,
-            )
+            if self.model_format=="llama_model":
+                outputs = self.llama_model(
+                    inputs_embeds=inputs_embeds,
+                    attention_mask=attention_mask,
+                    return_dict=True,
+                    labels=targets,
+                )
+            else:
+                outputs = self.gemma_model(
+                    inputs_embeds=inputs_embeds,
+                    attention_mask=attention_mask,
+                    return_dict=True,
+                    labels=targets,
+                )
         loss = outputs.loss
 
         return {"loss": loss}
@@ -247,6 +312,8 @@ class MarineGPT(Blip2Base):
         img_size = cfg.get("image_size")
         num_query_token = cfg.get("num_query_token")
         llama_model = cfg.get("llama_model")
+        gemma_model = cfg.get("gemma_model")
+        model_format = cfg.get("model_format")
 
         drop_path_rate = cfg.get("drop_path_rate", 0)
         use_grad_checkpoint = cfg.get("use_grad_checkpoint", False)
@@ -272,6 +339,8 @@ class MarineGPT(Blip2Base):
             freeze_qformer=freeze_qformer,
             num_query_token=num_query_token,
             llama_model=llama_model,
+            gemma_model=gemma_model,
+            model_format=model_format,
             prompt_path=prompt_path,
             prompt_template=prompt_template,
             max_txt_len=max_txt_len,

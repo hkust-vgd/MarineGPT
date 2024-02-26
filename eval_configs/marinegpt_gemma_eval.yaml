@@ -1,0 +1,24 @@
+model:
+  arch: marinegpt
+  model_type: pretrain_gemma
+  freeze_vit: True
+  freeze_qformer: False
+  max_txt_len: 160
+  end_sym: "###"
+  low_resource: True
+  prompt_path: "prompts/alignment_4.txt"
+  prompt_template: '###Human: {} ###Assistant: '
+  ckpt: './ckpt/gemma_2B/stage2/marinegpt_gemma_2B_stage2_ckpt.pth'
+
+datasets:
+  cc_sbu_align:
+    vis_processor:
+      train:
+        name: "blip2_image_eval"
+        image_size: 224
+    text_processor:
+      train:
+        name: "blip_caption"
+
+run:
+  task: image_text_pretrain

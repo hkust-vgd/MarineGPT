@@ -19,6 +19,7 @@ A first vision-language model specially designed for the marine domain. It could
 [Ziqiang Zheng](https://zhengziqiang.github.io/), [Jipeng Zhang](https://2003pro.github.io/), [Tuan-Anh Vu](https://tuananh1007.github.io/), [Shizhe Diao](https://shizhediao.github.io/), [Yue Him Wong Tim](https://scholar.google.com/citations?user=M5j3ZiQAAAAJ&hl=zh-CN), [Sai-Kit Yeung](https://saikit.org/) 
 
 ## 📢 News
+[Feb.26 2024] MarineGPT now supports the [GEMMA](https://blog.google/technology/developers/gemma-open-models/) and we released the pre-trained models of GEMMA.
 [Feb.19 2024] We released the pre-trained models of MarineGPT.
 
 
@@ -119,17 +120,45 @@ Then, set the variable *llama_model* in the model config file to the LLM weight 
 llama_model: "/path/to/LLM_weights/"
 ```
 
+**MarineGPT** can also support GEMMA-2B/7B. 
+Please download the corresponding LLM weights from the following huggingface space via clone the repository using git-lfs.
+
+Pre-trained GEMMA models
+|                                           GEMMA 2B                                           |                                          GEMMA 7B                                          |
+:----------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------:
+[Downlad](https://huggingface.co/google/gemma-2b) | [Download](https://huggingface.co/google/gemma-7b)
+
+GEMMA models after instruction tuning
+|                                           GEMMA 2B-it                                           |                                          GEMMA 7B-it                                          |
+:----------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------:
+[Downlad](https://huggingface.co/google/gemma-2b-it) | [Download](https://huggingface.co/google/gemma-7b-it) 
+
+Then, set the variable *gemma_model* in the model config file to the LLM weight path.
+
+```
+### modify the path of LLM weights in Line 16 of marinegpt/configs/models/marinegpt_gemma.yaml
+llama_model: "/path/to/GEMMA_weights/"
+```
+
 For **MarineGPT**, we will also plan to support the LLaMA and LLaMA 2 version. We will release the trained weights very soon.
 
+**Vicuna**
 | MarineGPT Stage 1 (Vicuna 13B)                                                                           | MarineGPT Stage 2 (Vicuna 13B)                                                                 | MarineGPT stage 1 (Vicuna 7B)                                                                  | MarineGPT stage 2 (Vicuna 7B)               |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
 | [Download](https://www.dropbox.com/scl/fi/ot7eefgrnq0jrx51mwktx/marinegpt_vicuna_13B_stage1_ckpt.pth?rlkey=b17nkct52abl5wdomjsvfrf1j&dl=0) | [Download](https://www.dropbox.com/scl/fi/zo19kqd7ay1h7frbxptnw/marinegpt_vicuna_13B_stage2_ckpt.pth?rlkey=2of6jkiaqdu1i44rzvxeg6hlu&dl=0) | [Download](https://www.dropbox.com/scl/fi/lmxwkp96u326h82lssj7w/marinegpt_vicuna_7B_stage1_ckpt.pth?rlkey=rfnup88u9y3go7vs8xowr73n5&dl=0) | [Download](https://www.dropbox.com/scl/fi/8uimfr9vjk8sa6yyvvnbk/marinegpt_vicuna_7B_stage2_ckpt.pth?rlkey=4cwn4cmgi8gjnqfyds2aqnw8s&dl=0) |
+
+**GEMMA**
+
+| MarineGPT Stage 2 (GEMMA 2B)                                                                           | MarineGPT Stage 2 (GENNA 2B-it)                                                                 | MarineGPT stage 2 (GEMMA 7B)                                                                  | MarineGPT stage 2 (GEMMA 7B-it)               |
+|---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| [Download](https://www.dropbox.com/scl/fi/ggk3gqyjq70szmti62jxd/marinegpt_gemma_2B_stage2_ckpt.pth?rlkey=tzjkil1aqg4ambarl5yyy9amz&dl=0) | Come soon | Come soon | Come soon |
 
 For **MarineGPT**, set the path to the pretrained checkpoint in the evaluation config file 
 in [eval_configs/marinegpt_eval.yaml](eval_configs/marinegpt_eval.yaml#L11) at Line 11.
 
 **3. Launching Demo Locally**
 
+**Vicuna**
 For MarineGPT, run
 
 ```
@@ -140,6 +169,19 @@ Please specify the path of pre-trained checkpoints (stage 1 or stage 2; Vicuda 7
 ```
 ### modify the path of pre-trained ckpts in Line 1q of eval_configs/marinegpt_eval.yaml
 ckpt: './ckpt/vicuna_7B/stage1/marinegpt_vicuna_7B_stage1_ckpt.pth'
+```
+
+**GEMMA**
+For MarineGPT, run
+
+```
+python demo.py --cfg-path eval_configs/marinegpt_gemma_eval.yaml  --gpu-id 0 --model_type gemma_model
+```
+Please specify the path of pre-trained checkpoints in [eval_configs/marinegpt_gemma_eval.yaml](eval_configs/marinegpt_gemma_eval.yaml#L11) at Line 11.   
+
+```
+### modify the path of pre-trained ckpts in Line 1q of eval_configs/marinegpt_eval.yaml
+ckpt: './ckpt/gemma_2B/stage2/marinegpt_gemma_2B_stage2_ckpt.pth'
 ```
 
 **4. Other applications**
