@@ -19,7 +19,11 @@ A first vision-language model specially designed for the marine domain. It could
 [Ziqiang Zheng](https://zhengziqiang.github.io/), [Jipeng Zhang](https://2003pro.github.io/), [Tuan-Anh Vu](https://tuananh1007.github.io/), [Shizhe Diao](https://shizhediao.github.io/), [Yue Him Wong Tim](https://scholar.google.com/citations?user=M5j3ZiQAAAAJ&hl=zh-CN), [Sai-Kit Yeung](https://saikit.org/) 
 
 ## 📢 News
+
+[Mar.2 2024] We include [LLaVA1.5](https://github.com/haotian-liu/LLaVA) for comparison and embed LLaVA into our MarineGPT. Pre-trained models will be uploaded soon! 
+
 [Feb.26 2024] MarineGPT now supports the [GEMMA](https://blog.google/technology/developers/gemma-open-models/) and we released the pre-trained models of GEMMA.
+
 [Feb.19 2024] We released the pre-trained models of MarineGPT.
 
 
@@ -151,7 +155,7 @@ For **MarineGPT**, we will also plan to support the LLaMA and LLaMA 2 version. W
 
 | MarineGPT Stage 2 (GEMMA 2B)                                                                           | MarineGPT Stage 2 (GENNA 2B-it)                                                                 | MarineGPT stage 2 (GEMMA 7B)                                                                  | MarineGPT stage 2 (GEMMA 7B-it)               |
 |---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| [Download](https://www.dropbox.com/scl/fi/ggk3gqyjq70szmti62jxd/marinegpt_gemma_2B_stage2_ckpt.pth?rlkey=tzjkil1aqg4ambarl5yyy9amz&dl=0) | Come soon | Come soon | Come soon |
+| [Download](https://www.dropbox.com/scl/fi/ggk3gqyjq70szmti62jxd/marinegpt_gemma_2B_stage2_ckpt.pth?rlkey=tzjkil1aqg4ambarl5yyy9amz&dl=0) | [Download](https://www.dropbox.com/scl/fi/otqak3ygc5qe9bdu6hthm/marinegpt_gemma_2B_it_stage2_ckpt.pth?rlkey=ejso60ger89mmplu8nc1o0mui&dl=0) | [Download](https://www.dropbox.com/scl/fi/rs39ofzfpt7fqon748m9x/marinegpt_gemma_7B_stage2_ckpt.pth?rlkey=xkfjslo5msoqt1i41p6uxh8gy&dl=0) | [Download](https://www.dropbox.com/scl/fi/7a0v6upm4ezcbysh3vu2p/marinegpt_gemma_7B_it_stage2_ckpt.pth?rlkey=kmdml4ktho3euajmmt55gqunt&dl=0) |
 
 For **MarineGPT**, set the path to the pretrained checkpoint in the evaluation config file 
 in [eval_configs/marinegpt_eval.yaml](eval_configs/marinegpt_eval.yaml#L11) at Line 11.
@@ -219,6 +223,7 @@ More implementation details will be added soon.
 + [MiniGPT-4](https://github.com/Vision-CAIR/MiniGPT-4) Our codes are mainly based on MiniGPT-4. Thanks for their contributions to the whole community.
 + [Lavis](https://github.com/salesforce/LAVIS) Our project is also built upon Lavis!
 + [Vicuna](https://github.com/lm-sys/FastChat) A powerful and open-source LLM to understand the user intents!
++ [LLaVA](https://github.com/haotian-liu/LLaVA) A powerful and open-source MLLM!
 
 ##  Citing MarineGPT
 
